@@ -626,14 +626,14 @@ footer{padding:90px 0 40px;overflow:hidden;position:relative}
     <div class="price-grid">
       <div class="plan gcard fade-up">
         <h3>Starter</h3><p class="for">For new businesses going online</p>
-        <div class="price">₹14,999 <small>/ project</small></div>
+        <div class="price">₹49,000 <small>/ project</small></div>
         <ul><li>5-page premium website</li><li>Mobile responsive design</li><li>Basic on-page SEO</li><li>Contact form + WhatsApp</li><li>1 month free support</li></ul>
         <a href="#contact" class="btn btn-ghost" style="justify-content:center">Choose Starter</a>
       </div>
       <div class="plan gcard featured fade-up">
         <span class="flag">Most Popular</span>
         <h3>Professional</h3><p class="for">For growing companies</p>
-        <div class="price">₹29,999 <small>/ project</small></div>
+        <div class="price">₹1,49,000 <small>/ project</small></div>
         <ul><li>Custom web application</li><li>Admin dashboard + CMS</li><li>Payment integration</li><li>Advanced SEO + analytics</li><li>3 months free support</li><li>Performance optimization</li></ul>
         <a href="#contact" class="btn btn-primary" style="justify-content:center">Choose Professional</a>
       </div>
@@ -683,10 +683,11 @@ footer{padding:90px 0 40px;overflow:hidden;position:relative}
           </div>
         </div>
         <div class="field"><label for="fmsg">Project details</label><textarea id="fmsg" placeholder="What are you looking to build?"></textarea></div>
-        <button id="sendBtn" class="btn btn-primary" style="width:100%;justify-content:center" onclick="sendForm()">Send Message
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+        <button id="sendBtn" class="btn btn-primary" style="width:100%;justify-content:center" onclick="sendForm()">Send via WhatsApp
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 0 1-12.3 7.6L3 21l1.9-5.7A8.5 8.5 0 1 1 21 11.5z"/></svg>
         </button>
         <p id="formNote" style="margin-top:14px;font-size:.85rem;color:var(--teal);display:none"></p>
+        <p style="margin-top:12px;font-size:.78rem;color:var(--muted)">Your enquiry goes straight to our WhatsApp — fastest way to reach us. Prefer email? Write to honivex@gmail.com.</p>
       </div>
       <div class="fade-up">
         <div class="contact-cards">
@@ -1012,56 +1013,30 @@ themeBtn.addEventListener('click', () => {
   themeIcon.innerHTML = next === 'dark' ? moonPath : sunPath;
 });
 
-async function sendForm(){
+function sendForm(){
   const name  = document.getElementById('fname').value.trim();
   const email = document.getElementById('femail').value.trim();
   const phone = document.getElementById('fphone').value.trim();
   const svc   = document.getElementById('fsvc').value;
   const msg   = document.getElementById('fmsg').value.trim();
   const note  = document.getElementById('formNote');
-  const btn   = document.getElementById('sendBtn');
   note.style.display = 'block';
-  if (!name || !email){
+  if (!name){
     note.style.color = '#ff8f6b';
-    note.textContent = 'Please enter your name and email so we can reply.';
+    note.textContent = 'Please enter your name so we know who we\'re talking to.';
     return;
   }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
-    note.style.color = '#ff8f6b';
-    note.textContent = "That email doesn't look right — please check it.";
-    return;
-  }
-  btn.disabled = true;
-  const orig = btn.innerHTML;
-  btn.innerHTML = 'Sending…';
-  note.style.color = 'var(--muted)';
-  note.textContent = 'Sending your message…';
-  try{
-    const res = await fetch('https://formsubmit.co/ajax/honivex@gmail.com', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json', 'Accept':'application/json'},
-      body: JSON.stringify({
-        name, email, phone, service: svc, message: msg,
-        _subject: 'New enquiry from HONIVEX website',
-        _template: 'table'
-      })
-    });
-    if (!res.ok) throw new Error('send failed');
-    await res.json();
-    note.style.color = 'var(--teal)';
-    note.textContent = "Message sent! We'll reply within one business day. ✓";
-    ['fname','femail','fphone','fmsg'].forEach(id => document.getElementById(id).value = '');
-  }catch(err){
-    const text = encodeURIComponent(
-      'Hi HONIVEX! I\'m ' + name + ' (' + email + (phone ? ', ' + phone : '') + '). ' +
-      'Service: ' + svc + '. ' + msg);
-    window.open('https://wa.me/916383156836?text=' + text, '_blank');
-    note.style.color = 'var(--teal)';
-    note.textContent = 'Email service unreachable, so we opened WhatsApp with your message pre-filled — just hit send there.';
-  }finally{
-    btn.disabled = false;
-    btn.innerHTML = orig;
-  }
+  const lines = [
+    'Hi HONIVEX! New project enquiry:',
+    '— Name: ' + name,
+    email ? '— Email: ' + email : '',
+    phone ? '— Phone: ' + phone : '',
+    '— Service: ' + svc,
+    msg ? '— Details: ' + msg : ''
+  ].filter(Boolean).join('\n');
+  window.open('https://wa.me/916383156836?text=' + encodeURIComponent(lines), '_blank');
+  note.style.color = 'var(--teal)';
+  note.textContent = 'WhatsApp opened with your enquiry — just tap Send there and we\'ll reply shortly. ✓';
 }
 
 
