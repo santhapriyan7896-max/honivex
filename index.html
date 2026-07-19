@@ -178,17 +178,15 @@ h1 .line span{display:inline-block}
 .mv-card p{color:var(--muted);font-size:.96rem}
 .mv-ic{width:40px;height:40px;border-radius:12px;background:var(--grad-bp);display:grid;place-items:center;flex-shrink:0}
 .mv-ic svg{width:19px;height:19px;stroke:#fff;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.team{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
-.member{padding:26px;text-align:center;transition:transform .35s}
-.member:hover{transform:translateY(-6px)}
-.avatar{width:76px;height:76px;border-radius:50%;margin:0 auto 14px;display:grid;place-items:center;font-family:'Sora';font-weight:700;font-size:1.3rem;color:#fff;background:var(--grad-bp)}
+.founder{display:flex;gap:22px;align-items:flex-start;padding:30px;transition:transform .35s}
+.founder:hover{transform:translateY(-5px)}
+.avatar{width:76px;height:76px;border-radius:50%;flex-shrink:0;display:grid;place-items:center;font-family:'Sora';font-weight:700;font-size:1.6rem;color:#fff;background:var(--grad-bp)}
 .avatar.v2{background:linear-gradient(135deg,#23C9A7,#4F46E5)}
 .avatar.v3{background:linear-gradient(135deg,#A8E34B,#23C9A7)}
-.avatar.v4{background:linear-gradient(135deg,#7C5CFF,#23C9A7)}
-.member b{display:block;font-family:'Sora'}
-.member span{font-size:.83rem;color:var(--muted)}
+.founder b{display:block;font-family:'Sora';font-size:1.15rem}
+.founder > div > span{font-size:.85rem;color:var(--teal);font-weight:600;display:block;margin:2px 0 12px}
+.founder p{color:var(--muted);font-size:.92rem}
 @media(max-width:900px){.about-grid{grid-template-columns:1fr}}
-@media(max-width:520px){.team{grid-template-columns:1fr 1fr;gap:12px}}
 
 /* ================= SERVICES RING ================= */
 #services{padding:0;background:var(--bg-2);border-top:1px solid var(--stroke);border-bottom:1px solid var(--stroke)}
@@ -364,7 +362,7 @@ footer{padding:90px 0 40px;overflow:hidden;position:relative}
   .float-wa{right:18px;bottom:18px;width:52px;height:52px}
   .ghost{font-size:clamp(3.2rem,18vw,6rem);top:30px}
   .mv-card{padding:24px}
-  .member{padding:20px 14px}
+  .founder{flex-direction:column;padding:24px}
   .tech .ic{width:52px;height:52px;font-size:1.3rem}
 }
 
@@ -502,8 +500,8 @@ footer{padding:90px 0 40px;overflow:hidden;position:relative}
   <span class="ghost">ABOUT</span>
   <div class="container">
     <div class="chapter"><b>01</b><i></i><span>Who we are</span></div>
-    <h2 class="sec-title fade-up">A team obsessed with<br><span class="grad-text">building things right</span></h2>
-    <p class="sec-sub fade-up">Engineers, designers, and strategists who treat your product like our own — shipping quality software on time, every time.</p>
+    <h2 class="sec-title fade-up">A studio obsessed with<br><span class="grad-text">building things right</span></h2>
+    <p class="sec-sub fade-up">A founder-led studio that treats your product like its own — shipping quality software on time, every time.</p>
     <div class="about-grid">
       <div class="about-left">
         <div class="mv-card gcard fade-up">
@@ -516,13 +514,18 @@ footer{padding:90px 0 40px;overflow:hidden;position:relative}
         </div>
         <div class="mv-card gcard fade-up">
           <h3><span class="mv-ic" style="background:linear-gradient(135deg,#A8E34B,#23C9A7)"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>Why Choose Us</h3>
-          <p>Direct access to senior engineers, transparent weekly progress, fixed timelines, and code you actually own. No black boxes.</p>
+          <p>Direct access to the founder, transparent weekly progress, fixed timelines, and code you actually own. No black boxes.</p>
         </div>
       </div>
       <div class="about-right">
-        <p style="color:var(--muted);font-size:.8rem;letter-spacing:.22em;text-transform:uppercase;margin-bottom:18px" class="fade-up">The core team</p>
-        <div class="team">
-          <div class="member gcard fade-up"><div class="avatar">A</div><b>Akilesh</b><span>Founder &amp; Lead Engineer</span></div>          
+        <p style="color:var(--muted);font-size:.8rem;letter-spacing:.22em;text-transform:uppercase;margin-bottom:18px" class="fade-up">The founder</p>
+        <div class="founder gcard fade-up">
+          <div class="avatar">A</div>
+          <div>
+            <b>Akilesh</b>
+            <span>Founder &amp; Lead Engineer</span>
+            <p>Leads every project personally, end to end — from the first discovery call to launch and support. One point of contact, full accountability, no hand-offs.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -680,7 +683,7 @@ footer{padding:90px 0 40px;overflow:hidden;position:relative}
           </div>
         </div>
         <div class="field"><label for="fmsg">Project details</label><textarea id="fmsg" placeholder="What are you looking to build?"></textarea></div>
-        <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="sendForm()">Send Message
+        <button id="sendBtn" class="btn btn-primary" style="width:100%;justify-content:center" onclick="sendForm()">Send Message
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
         </button>
         <p id="formNote" style="margin-top:14px;font-size:.85rem;color:var(--teal);display:none"></p>
@@ -1009,19 +1012,56 @@ themeBtn.addEventListener('click', () => {
   themeIcon.innerHTML = next === 'dark' ? moonPath : sunPath;
 });
 
-function sendForm(){
-  const name = document.getElementById('fname').value.trim();
+async function sendForm(){
+  const name  = document.getElementById('fname').value.trim();
   const email = document.getElementById('femail').value.trim();
-  const note = document.getElementById('formNote');
+  const phone = document.getElementById('fphone').value.trim();
+  const svc   = document.getElementById('fsvc').value;
+  const msg   = document.getElementById('fmsg').value.trim();
+  const note  = document.getElementById('formNote');
+  const btn   = document.getElementById('sendBtn');
   note.style.display = 'block';
   if (!name || !email){
     note.style.color = '#ff8f6b';
-    note.textContent = 'Enter your name and email so we can reply.';
+    note.textContent = 'Please enter your name and email so we can reply.';
     return;
   }
-  note.style.color = 'var(--teal)';
-  note.textContent = "Message sent. We'll reply within one business day. ✓";
-  ['fname','femail','fphone','fmsg'].forEach(id => document.getElementById(id).value = '');
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+    note.style.color = '#ff8f6b';
+    note.textContent = "That email doesn't look right — please check it.";
+    return;
+  }
+  btn.disabled = true;
+  const orig = btn.innerHTML;
+  btn.innerHTML = 'Sending…';
+  note.style.color = 'var(--muted)';
+  note.textContent = 'Sending your message…';
+  try{
+    const res = await fetch('https://formsubmit.co/ajax/honivex@gmail.com', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json', 'Accept':'application/json'},
+      body: JSON.stringify({
+        name, email, phone, service: svc, message: msg,
+        _subject: 'New enquiry from HONIVEX website',
+        _template: 'table'
+      })
+    });
+    if (!res.ok) throw new Error('send failed');
+    await res.json();
+    note.style.color = 'var(--teal)';
+    note.textContent = "Message sent! We'll reply within one business day. ✓";
+    ['fname','femail','fphone','fmsg'].forEach(id => document.getElementById(id).value = '');
+  }catch(err){
+    const text = encodeURIComponent(
+      'Hi HONIVEX! I\'m ' + name + ' (' + email + (phone ? ', ' + phone : '') + '). ' +
+      'Service: ' + svc + '. ' + msg);
+    window.open('https://wa.me/916383156836?text=' + text, '_blank');
+    note.style.color = 'var(--teal)';
+    note.textContent = 'Email service unreachable, so we opened WhatsApp with your message pre-filled — just hit send there.';
+  }finally{
+    btn.disabled = false;
+    btn.innerHTML = orig;
+  }
 }
 
 
